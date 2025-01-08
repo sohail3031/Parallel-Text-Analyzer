@@ -1,31 +1,93 @@
-# Parallel Text Analyzer
+# Word Search and Replace Tool
 
-**Parallel Text Analyzer** is a high-performance tool for text analysis, designed to work efficiently in distributed environments using the Message Passing Interface (MPI). It supports powerful operations such as case-sensitive and case-insensitive word matching, regex-based searches, and text replacement across multiple files in parallel.
-
----
+This repository contains two implementations of a text processing tool for searching and replacing words in `.txt` files:
+1. A **Serial Implementation**.
+2. A **Parallel Implementation** using MPI (Message Passing Interface).
 
 ## Features
 
-- **Case-Sensitive and Case-Insensitive Word Matching**: Search for specific words in text files with or without considering letter case.
-- **Regex-Based Searching**: Perform advanced pattern matching using regular expressions.
-- **Text Replacement**: Replace occurrences of words or patterns in text files.
-- **Parallel Processing**: Leverages MPI to process text files concurrently, boosting performance for large datasets.
+### Serial Implementation
+- **Search and Replace Options:**
+  - Case-sensitive and case-insensitive search.
+  - Whole word-only matching.
+  - Regular expression support.
+- **File Handling:**
+  - Processes multiple `.txt` files in the current directory.
+  - Excludes the `operation_log.txt` file.
+- **Logging:**
+  - Logs all operations (search/replace) with timestamps and details.
+- **Performance:**
+  - Sequential execution suitable for small datasets or single-threaded environments.
+
+### Parallel Implementation
+- **MPI-based Parallelism:**
+  - Divides `.txt` files among available MPI processes for concurrent processing.
+- **Distributed Search and Replace:**
+  - Supports the same search and replace features as the serial version.
+- **Improved Performance:**
+  - Exploits parallelism to handle large datasets efficiently.
+- **Master-Slave Architecture:**
+  - Master process distributes files and aggregates results, while worker processes perform the operations.
+- **Scalability:**
+  - Designed to work effectively on clusters or multi-core systems.
 
 ---
 
-## Prerequisites
+## Requirements
 
-- **MPI Installation**: Ensure MPI is installed on your system. Common implementations include:
-  - OpenMPI
-  - MPICH
+### For Serial Code
+- C Compiler (GCC recommended)
+- POSIX-compliant environment for regex support.
 
-- **C Compiler**: A C compiler such as `gcc` with MPI support.
+### For Parallel Code
+- MPI implementation (e.g., OpenMPI or MPICH)
+- C Compiler (GCC with MPI support)
 
 ---
 
-## Installation
+## Usage
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/yourusername/Parallel-Text-Analyzer.git
-   cd Parallel-Text-Analyzer
+### Compiling the Code
+
+#### Serial Code
+##### bash
+gcc -o serial.c -lm -pthread
+
+#### Parallel Code
+##### bash
+mpicc -o word_tool_parallel word_tool_parallel.c -lm
+
+#### Running the Code
+##### Serial Code
+./word_tool_serial
+
+##### Parallel Code
+mpirun -np <num_processes> ./word_tool_parallel
+
+## Input
+The program processes all .txt files in the current directory (excluding operation_log.txt).
+
+### User Interaction
+Both versions prompt the user for:
+
+The operation: Search or Replace.
+The search word or regex pattern.
+Replace word (for Replace operation).
+Matching options (case sensitivity, whole word).
+
+## Log File
+Both implementations maintain an operation_log.txt file that records:
+
+Timestamp of the operation.
+Type of operation (Search or Replace).
+Details of the search/replace (word, file name, count).
+
+## Notes
+Ensure all .txt files to be processed are in the same directory as the executable.
+For the parallel version, the number of MPI processes should not exceed the number of .txt files.
+If using regex patterns, ensure proper escaping for special characters.
+
+## Future Enhancements
+Adding GUI support for ease of use.
+Extending parallelism to support GPU acceleration (e.g., with CUDA).
+Enhanced logging with real-time progress tracking.
