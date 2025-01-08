@@ -1,4 +1,4 @@
-# Word Search and Replace Tool
+# Parallel And Serial Text Analyzer
 
 This repository contains two implementations of a text processing tool for searching and replacing words in `.txt` files:
 1. A **Serial Implementation**.
@@ -50,19 +50,17 @@ This repository contains two implementations of a text processing tool for searc
 ### Compiling the Code
 
 #### Serial Code
-##### bash
-gcc -o serial.c -lm -pthread
+  gcc -o serial.c -lm -pthread
 
 #### Parallel Code
-##### bash
-mpicc -o word_tool_parallel word_tool_parallel.c -lm
+  mpicc -o parallel.c -lm
 
 #### Running the Code
 ##### Serial Code
-./word_tool_serial
+  ./serial
 
 ##### Parallel Code
-mpirun -np <num_processes> ./word_tool_parallel
+mpirun -np <num_processes> ./parallel
 
 ## Input
 The program processes all .txt files in the current directory (excluding operation_log.txt).
